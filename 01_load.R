@@ -65,11 +65,11 @@ if (!file.exists(BTM_file)) {
     fasterize(ProvRast, background=0)
 
   # Write out the BTM layers as individual rasters
-  writeRaster(AgricultureR, filename=file.path(BTMDir,"AgricultureR.tif"), format="GTiff", overwrite=TRUE)
-  writeRaster(RangeR, filename=file.path(BTMDir,"RangeR.tif"), format="GTiff", overwrite=TRUE)
-  writeRaster(UrbanR, filename=file.path(BTMDir,"Urban.tif"), format="GTiff", overwrite=TRUE)
-  writeRaster(MiningR, filename=file.path(BTMDir,"Mining.tif"), format="GTiff", overwrite=TRUE)
-  writeRaster(RecR, filename=file.path(BTMDir,"Rec.tif"), format="GTiff", overwrite=TRUE)
+  writeRaster(AgricultureR, filename=file.path(spatialOutDir,"AgricultureR.tif"), format="GTiff", overwrite=TRUE)
+  writeRaster(RangeR, filename=file.path(spatialOutDir,"RangeR.tif"), format="GTiff", overwrite=TRUE)
+  writeRaster(UrbanR, filename=file.path(spatialOutDir,"Urban.tif"), format="GTiff", overwrite=TRUE)
+  writeRaster(MiningR, filename=file.path(spatialOutDir,"Mining.tif"), format="GTiff", overwrite=TRUE)
+  writeRaster(RecR, filename=file.path(spatialOutDir,"Rec.tif"), format="GTiff", overwrite=TRUE)
   writeRaster(NonHab, filename=file.path(StrataDir,"NonHab.tif"), format="GTiff", overwrite=TRUE)
 
   #Make a raster brick of layers - not using due to raster memory allocation bug
@@ -153,13 +153,13 @@ if (!file.exists(GB_file)) {
   # Adjusts for coastal disconnected roads - setting them to back country
   FrontCountryr <- FrontCountry[FrontCountry$FrontCountry_Class_Coastal_Adj %in% c(1,2,3) ,] %>%
     fasterize(ProvRast, background=0)
-  writeRaster(FrontCountryr, filename=file.path(BearsCEDir  ,"FrontCountryr.tif"), format="GTiff", overwrite=TRUE)
+  writeRaster(FrontCountryr, filename=file.path(spatialOutDir  ,"FrontCountryr.tif"), format="GTiff", overwrite=TRUE)
 
   #Secure Habitat
   Secure <- read_sf(GB_gdb, layer = "SecCore_10km2_noDisturb_BEI_Cap_BC")
   # Make a Secure Habitat raster, gridcodes 1,2 & 3 are 'front country', 4 & 5 are 'back country'
   Securer <- fasterize(Secure, ProvRast, field = 'grid_code', background=NA)
-  writeRaster(Securer, filename=file.path(BearsCEDir  ,"Securer.tif"), format="GTiff", overwrite=TRUE)
+  writeRaster(Securer, filename=file.path(spatialOutDir  ,"Securer.tif"), format="GTiff", overwrite=TRUE)
 
   #Mortality - see GB_unreported for update
   #Mort <- read_sf(GB_gdb, layer = "COMBINED_Grizzly_PopMort_Allocation_2004_to_2014")
@@ -171,14 +171,14 @@ if (!file.exists(GB_file)) {
   # for status used all mortality
   #Mortr <- Mort[Mort$Pop_Mort_Flag_v1_allAreas == 'Fail' ,] %>%
   #  fasterize(ProvRast, background=0)
-  #writeRaster(Mortr, filename=file.path(BearsCEDir,'Mortr.tif'), format="GTiff", overwrite=TRUE)
+  #writeRaster(Mortr, filename=file.path(spatialOutDir,'Mortr.tif'), format="GTiff", overwrite=TRUE)
 
   #Mid Seral
   MidSeral <- read_sf(GB_gdb, layer = "LU_midSeral_conifer")
   # Make a Mid Seral raster - 1 is low
   MidSeralr <- MidSeral[MidSeral$mid_Seral_Num == 1 ,] %>%
     fasterize(ProvRast, background=0)
-  writeRaster(MidSeralr, filename=file.path(BearsCEDir,"MidSeralr.tif"), format="GTiff", overwrite=TRUE)
+  writeRaster(MidSeralr, filename=file.path(spatialOutDir,"MidSeralr.tif"), format="GTiff", overwrite=TRUE)
 
   # Hunter Day density per km2 LU_hunterDays_annual_per_km2 from old data - replaced by more recent
   #HunterDayD <- read_sf(GB_gdb, layer = "LU_SUMMARY_poly_v5_20160210")
@@ -193,7 +193,7 @@ if (!file.exists(GB_file)) {
 
   SalmonChangr <- SalmonChange %>%
     fasterize(ProvRast, field='SalmonPc', background=0)
-  writeRaster(SalmonChangr, filename=file.path(BearsCEDir, "SalmonChangr.tif"), format="GTiff", overwrite=TRUE)
+  writeRaster(SalmonChangr, filename=file.path(spatialOutDir, "SalmonChangr.tif"), format="GTiff", overwrite=TRUE)
 
 
   #Read in landcover
@@ -248,7 +248,7 @@ if (!file.exists(GB_file)) {
 
 
 } else {
-  NonHab<-raster(file.path(StrataDir,"NonHab.tif"))
+  NonHab<-raster(file.path(StrataDir,"Strata/NonHab.tif"))
   GBPUr<-raster(file.path(StrataDir,"Strata/GBPUr.tif"))
   WMUr<-raster(file.path(StrataDir,"Strata/WMUr.tif"))
   WMUr_NonHab<-raster(file.path(StrataDir,"Strata/WMUr_NonHab.tif"))
