@@ -34,3 +34,22 @@ vignettes/*.pdf
 
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
+.Rproj.user
+
+# Data files
+/data*/
+/GB_Unreported/
+/Mortality/
+/HumanDensity/
+/HunterDayDensity/
+/Livestock/
+  #Figures
+*.png
+*.html
+*.pdf
+.DS_Store
+/out*/
+  /tmp*/
+  *qgs*
+  *doc*
+
