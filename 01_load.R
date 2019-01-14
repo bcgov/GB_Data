@@ -158,7 +158,8 @@ if (!file.exists(GB_file)) {
   #Secure Habitat
   Secure <- read_sf(GB_gdb, layer = "SecCore_10km2_noDisturb_BEI_Cap_BC")
   # Make a Secure Habitat raster, gridcodes 1,2 & 3 are 'front country', 4 & 5 are 'back country'
-  Securer <- fasterize(Secure, ProvRast, field = 'grid_code', background=NA)
+  Securer <- Secure[Secure$grid_code == 2 ,] %>%
+    fasterize(ProvRast, background=0)
   writeRaster(Securer, filename=file.path(spatialOutDir  ,"Securer.tif"), format="GTiff", overwrite=TRUE)
 
   #Mortality - see GB_unreported for update
@@ -248,16 +249,16 @@ if (!file.exists(GB_file)) {
 
 
 } else {
-  NonHab<-raster(file.path(StrataDir,"Strata/NonHab.tif"))
-  GBPUr<-raster(file.path(StrataDir,"Strata/GBPUr.tif"))
-  WMUr<-raster(file.path(StrataDir,"Strata/WMUr.tif"))
-  WMUr_NonHab<-raster(file.path(StrataDir,"Strata/WMUr_NonHab.tif"))
-  GBPUr_NonHab<-raster(file.path(StrataDir,"Strata/GBPUr_NonHab.tif"))
-  GBPUr_BEI_1_2<-raster(file.path(StrataDir,"Strata/GBPUr_BEI_1_2.tif"))
-  GBPUr_BEI_1_5<-raster(file.path(StrataDir,"Strata/GBPUr_BEI_1_5.tif"))
-  GBPUr_LFormFlat<-raster(file.path(StrataDir,"Strata/GBPUr_LFormFlat.tif"))
-  GBPUr_LFormFlatFlat<-raster(file.path(StrataDir,"Strata/GBPUr_LFormFlatFlat.tif"))
-  GBPUr_Forest<-raster(file.path(StrataDir,"Strata/GBPUr_Forest.tif"))
+  NonHab<-raster(file.path(StrataDir,"NonHab.tif"))
+  GBPUr<-raster(file.path(StrataDir,"GBPUr.tif"))
+  WMUr<-raster(file.path(StrataDir,"WMUr.tif"))
+  WMUr_NonHab<-raster(file.path(StrataDir,"WMUr_NonHab.tif"))
+  GBPUr_NonHab<-raster(file.path(StrataDir,"GBPUr_NonHab.tif"))
+  GBPUr_BEI_1_2<-raster(file.path(StrataDir,"GBPUr_BEI_1_2.tif"))
+  GBPUr_BEI_1_5<-raster(file.path(StrataDir,"GBPUr_BEI_1_5.tif"))
+  GBPUr_LFormFlat<-raster(file.path(StrataDir,"GBPUr_LFormFlat.tif"))
+  GBPUr_LFormFlatFlat<-raster(file.path(StrataDir,"GBPUr_LFormFlatFlat.tif"))
+  GBPUr_Forest<-raster(file.path(StrataDir,"GBPUr_Forest.tif"))
   GB_Brick <- readRDS(file = GB_file)
 }
 

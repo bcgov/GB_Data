@@ -31,7 +31,7 @@ dataOutDir <- file.path(OutDir,'data')
 spatialOutDir <- file.path(OutDir,'spatial')
 figsOutDir <- file.path(OutDir,'figures')
 DataDir <- 'data'
-StrataDir <- file.path(DataDir,'Strata')
+StrataDir <- file.path(OutDir,'Strata')
 BTMDir <- file.path(DataDir,'BTM')
 BearsCEDir <- file.path(DataDir,'BearsCE')
 LandFormDir <- file.path(DataDir,'LandForm')
@@ -40,32 +40,7 @@ LandFormDir <- file.path(DataDir,'LandForm')
 dir.create(file.path(OutDir), showWarnings = FALSE)
 dir.create(file.path(dataOutDir), showWarnings = FALSE)
 dir.create(file.path(spatialOutDir), showWarnings = FALSE)
-dir.create(file.path(StrataOutDir), showWarnings = FALSE)
+dir.create(file.path(StrataDir), showWarnings = FALSE)
 dir.create(file.path(figsOutDir), showWarnings = FALSE)
 dir.create(DataDir, showWarnings = FALSE)
 dir.create("tmp", showWarnings = FALSE)
-
-#Required packages
-options(scipen=3)
-require(sp)
-gpclibPermit()
-require(raster)
-require(maptools)
-#require(rgdal)
-require(shapefiles)
-require(gpclib)
-require(RColorBrewer) # creates nice color schemes
-require(e1071) #package needed for classInt
-require(classInt) # finds class intervals for continuous variables
-require(png) # next 3 for pulling in google maps
-require(RJSONIO)
-require(RgoogleMaps)
-require(maps) # for scale bar
-require(rgeos)
-require(GISTools)
-require(Hmisc)
-library(Hmisc)
-require(corrgram)
-require(aod)
-
-
