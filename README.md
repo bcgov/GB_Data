@@ -7,7 +7,7 @@ Bear\_Data
 This repository contains [R](https://www.r-project.org/) code that summarizes spatial & tabular data used by a suite of Grizzly Bear assessments. It reads raw data and generates Provincial 1 ha rasters and stores in a standard directory for use by other analyses.
 
 Data
-====
+----
 
 Base Line Thematic data for land type - agriculture, urban, range, mining footprint, recreation and for identifying Grizzly Bear 'non habitat' ice, water, rock <https://catalogue.data.gov.bc.ca/dataset/baseline-thematic-mapping-present-land-use-version-1-spatial-layer>
 
