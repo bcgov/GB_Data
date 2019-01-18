@@ -4,14 +4,18 @@ If you have bcgovr installed and you use RStudio, click the 'Insert BCDevex Badg
 Bear\_Data
 ==========
 
+Base Line Thematic data for land type - agriculture, urban, range, mining footprint, recreation and for identifying Grizzly Bear 'non habitat' ice, water, rock <https://catalogue.data.gov.bc.ca/dataset/baseline-thematic-mapping-present-land-use-version-1-spatial-layer>
+
+Provincial Grizzly Bear Cumulative Effects input layers - front country, core security areas, road density, mid seral forest, salmon biomass Requires permision to access
+
+Landform facet from AdaptWest, used for identifying flat areas <https://adaptwest.databasin.org/pages/adaptwest-landfacets>
+
 ### Usage
 
 There are two core scripts that are required for the analysis:
 
 -   header.R - sets up the enviornment
--   01\_load.R - loads bear indicators from various sources and writes out rasters
-
-### Project Status
+-   01\_load.R - loads bear indicators from various sources and writes out rasters used by other analyses
 
 ### Getting Help or Reporting an Issue
 
