@@ -67,9 +67,9 @@ if (!file.exists(BTM_file)) {
   # Write out the BTM layers as individual rasters
   writeRaster(AgricultureR, filename=file.path(spatialOutDir,"AgricultureR.tif"), format="GTiff", overwrite=TRUE)
   writeRaster(RangeR, filename=file.path(spatialOutDir,"RangeR.tif"), format="GTiff", overwrite=TRUE)
-  writeRaster(UrbanR, filename=file.path(spatialOutDir,"Urban.tif"), format="GTiff", overwrite=TRUE)
-  writeRaster(MiningR, filename=file.path(spatialOutDir,"Mining.tif"), format="GTiff", overwrite=TRUE)
-  writeRaster(RecR, filename=file.path(spatialOutDir,"Rec.tif"), format="GTiff", overwrite=TRUE)
+  writeRaster(UrbanR, filename=file.path(spatialOutDir,"UrbanR.tif"), format="GTiff", overwrite=TRUE)
+  writeRaster(MiningR, filename=file.path(spatialOutDir,"MiningR.tif"), format="GTiff", overwrite=TRUE)
+  writeRaster(RecR, filename=file.path(spatialOutDir,"RecR.tif"), format="GTiff", overwrite=TRUE)
   writeRaster(NonHab, filename=file.path(StrataDir,"NonHab.tif"), format="GTiff", overwrite=TRUE)
 
   #Make a raster brick of layers - not using due to raster memory allocation bug
@@ -103,10 +103,13 @@ if (!file.exists(GB_file)) {
   saveRDS(GBPU, file = 'tmp/GBPU')
   saveRDS(GBPU_lut, file = file.path(StrataDir ,'GBPU_lut'))
 
+  # Save a GBPU shape
+  GBPU$GBPU<-GBPU$GRIZZLY_BEAR_POP_UNIT_ID
+  st_write(GBPU, file.path(spatialOutDir,'GBPU.shp'), delete_layer = TRUE)
+
   # Make a GBPU raster
   GBPUr <- fasterize(GBPU, ProvRast, field = 'GRIZZLY_BEAR_POP_UNIT_ID', background=NA)
   #saveRDS(GBPUr, file = 'tmp/GBPUr')
-  writeRaster(GBPUr, filename=file.path(StrataDir ,"GBPUr.tif"), format="GTiff", overwrite=TRUE)
 
   #WMU
   WMU <- read_sf(GB_gdb, layer = "WMU_grizz_Link")
@@ -116,6 +119,9 @@ if (!file.exists(GB_file)) {
   #Second place a 0 if the 'character' is blank (ie single digit)
   #Third concatenate
   WMU$WMU<-as.numeric(paste0(substr(WMU$WILDLIFE_MGMT_UNIT_ID, 0, 1), gsub(" ", "0", sprintf("% 2s", substr(WMU$WILDLIFE_MGMT_UNIT_ID, 3, 4)))))
+
+  # Save a WMU shape
+  st_write(WMU, file.path(spatialOutDir,'WMU.shp'), delete_layer = TRUE)
 
   # Make a WMU raster
   WMUr <- fasterize(WMU, ProvRast, field = 'WMU', background=NA)
@@ -177,9 +183,9 @@ if (!file.exists(GB_file)) {
   #Mid Seral
   MidSeral <- read_sf(GB_gdb, layer = "LU_midSeral_conifer")
   # Make a Mid Seral raster - 1 is low
-  MidSeralr <- MidSeral[MidSeral$mid_Seral_Num == 1 ,] %>%
+  MidSeralR <- MidSeral[MidSeral$mid_Seral_Num == 1 ,] %>%
     fasterize(ProvRast, background=0)
-  writeRaster(MidSeralr, filename=file.path(spatialOutDir,"MidSeralr.tif"), format="GTiff", overwrite=TRUE)
+  writeRaster(MidSeralR, filename=file.path(spatialOutDir,"MidSeralR.tif"), format="GTiff", overwrite=TRUE)
 
   # Hunter Day density per km2 LU_hunterDays_annual_per_km2 from old data - replaced by more recent
   #HunterDayD <- read_sf(GB_gdb, layer = "LU_SUMMARY_poly_v5_20160210")
@@ -192,9 +198,9 @@ if (!file.exists(GB_file)) {
   # Make a Salmon raster of per cent negative change - ie a -ve number indicates a positive change
   SalmonChange$SalmonPc<-(SalmonChange$Tot_Salmon_kg_all-SalmonChange$Tot_Salmon_kg_recent)/SalmonChange$Tot_Salmon_kg_all*100
 
-  SalmonChangr <- SalmonChange %>%
+  SalmonChangeR <- SalmonChange %>%
     fasterize(ProvRast, field='SalmonPc', background=0)
-  writeRaster(SalmonChangr, filename=file.path(spatialOutDir, "SalmonChangr.tif"), format="GTiff", overwrite=TRUE)
+  writeRaster(SalmonChangeR, filename=file.path(spatialOutDir, "SalmonChangeR.tif"), format="GTiff", overwrite=TRUE)
 
 
   #Read in landcover
