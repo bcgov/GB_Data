@@ -278,15 +278,27 @@ saveRDS(GBPop, file = 'tmp/GBPop')
 #Extract WMU/LEH/NPark data
 st_geometry(GBPop)<-NULL
 WMUpop<-GBPop %>%
-  dplyr::select(Region=REGION_RESPONSIBLE_NAME, GBPU_MU_LEH_uniqueID,MU,LEH_Zone2_fix,MAX_ALLOW_MORT_PERC,
+  dplyr::select(Region=REGION_RESPONSIBLE_NAME, GBPU_MU_LEH_uniqueID,MU,LEH_Zone2_fix,
+                MAX_ALLOW_MORT_PERC,
                 GRIZZLY_BEAR_POP_UNIT_ID, POPULATION_NAME,STATUS,EST_POP_DENSITY_2018,
-                EST_POP_2018,EST_POP_2015, AREA_KM2, AREA_KM2_noWaterIce)
+                EST_POP_2018,EST_POP_2015, AREA_KM2, AREA_KM2_noWaterIce) %>%
+         mutate(EST_POP_DENSITY_2018=round(EST_POP_DENSITY_2018,2))
+
 WriteXLS(WMUpop, file.path(dataOutDir,paste('WMUpop.xls',sep='')))
+
+WMUtest <-WMUpop %>%
+  dplyr::select(GBPU_MU_LEH_uniqueID,POPULATION_NAME,EST_POP_2018,EST_POP_DENSITY_2018,AREA_KM2,
+                AREA_KM2_noWaterIce) %>%
+  mutate(densityCalc = round(EST_POP_2018/AREA_KM2*1000,2)) %>%
+  mutate(densityCalc_noWaterIce = round(EST_POP_2018/AREA_KM2_noWaterIce*1000,2))
 
 #Extract GBPU scale population data
 GBPUpop<-WMUpop %>%
   dplyr::group_by(GRIZZLY_BEAR_POP_UNIT_ID, POPULATION_NAME) %>%
   dplyr::summarise(pop2018 = sum(EST_POP_2018), pop2015=sum(EST_POP_2015),
                    Status=first(STATUS),Area_km2=sum(AREA_KM2),
-                   Area_km2_noWaterIce=sum(AREA_KM2_noWaterIce))
+                   Area_km2_noWaterIce=sum(AREA_KM2_noWaterIce)) %>%
+  mutate(Density = round(pop2018/Area_km2*1000,2)) %>%
+  mutate(Density_noWaterIce = round(pop2018/Area_km2_noWaterIce*1000,2))
+
 WriteXLS(GBPUpop, file.path(dataOutDir,paste('GBPUpop.xls',sep='')))
