@@ -82,7 +82,7 @@ if (!file.exists(BTM_file)) {
   NonHab<-raster(file.path(DataDir,"NonHab.tif"))
 }
 
-# Read in GB data - compiled through CE, includes latest GBPU, WMU, Security Areas, Human Access, Raod Density
+# Read in GB data - compiled through CE, includes latest GBPU, WMU, Security Areas, Human Access, Road Density
 GB_file <- file.path("tmp/GB_Brick")
 if (!file.exists(GB_file)) {
   #Read layers from threats directory #maybe change to generic diretory?
@@ -268,3 +268,24 @@ if (!file.exists(GB_file)) {
   GB_Brick <- readRDS(file = GB_file)
 }
 
+#Read in the 2018 population data - extract WMU and GBPU based populion estimates
+#save for mortality and NatureServe analysis
+GBPop_gdb <- list.files(file.path(GBPDir), pattern = ".gdb", full.names = TRUE)[1]
+fc_list <- st_layers(GBPop_gdb)
+GBPop <- read_sf(GBPop_gdb, layer = "GBPU_MU_LEH_2015_2018_bear_density_DRAFT")
+saveRDS(GBPop, file = 'tmp/GBPop')
+
+#Extract WMU/LEH/NPark data
+st_geometry(GBPop)<-NULL
+WMUpop<-GBPop %>%
+  dplyr::select(GBPU_MU_LEH_uniqueID,MU,LEH_Zone2_fix,MAX_ALLOW_MORT_PERC,
+                GRIZZLY_BEAR_POP_UNIT_ID, POPULATION_NAME,STATUS,EST_POP_DENSITY_2018,
+                EST_POP_2018,EST_POP_2015, AREA_KM2, AREA_KM2_noWaterIce)
+WriteXLS(WMUpop, file.path(dataOutDir,paste('WMUpop.xls',sep='')))
+
+#Extract GBPU scale population data
+GBPUpop<-WMUpop %>%
+  dplyr::group_by(GRIZZLY_BEAR_POP_UNIT_ID, POPULATION_NAME) %>%
+  dplyr::summarise(pop2018 = sum(EST_POP_2018), pop2015=sum(EST_POP_2015),
+                   Status=first(STATUS),Area_km2=sum(AREA_KM2),Area_km2_noWaterIce=sum(AREA_KM2_noWaterIce))
+WriteXLS(GBPUpop, file.path(dataOutDir,paste('GBPUpop.xls',sep='')))

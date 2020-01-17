@@ -33,6 +33,7 @@ figsOutDir <- file.path(OutDir,'figures')
 DataDir <- 'data'
 StrataDir <- file.path(OutDir,'Strata')
 BTMDir <- file.path(DataDir,'BTM')
+GBPDir <-file.path(DataDir,'Population/Bear_Density_2018')
 BearsCEDir <- file.path(DataDir,'BearsCE')
 LandFormDir <- file.path(DataDir,'LandForm')
 
