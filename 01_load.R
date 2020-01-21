@@ -104,7 +104,9 @@ if (!file.exists(GB_file)) {
   saveRDS(GBPU_lut, file = file.path(StrataDir ,'GBPU_lut'))
 
   # Save a GBPU shape
-  GBPU$GBPU<-GBPU$GRIZZLY_BEAR_POP_UNIT_ID
+  GBPU <- GBPU %>%
+    dplyr::rename(GBPU=GRIZZLY_BEAR_POP_UNIT_ID)
+
   st_write(GBPU, file.path(spatialOutDir,'GBPU.shp'), delete_layer = TRUE)
 
   # Make a GBPU raster
